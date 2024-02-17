@@ -72,6 +72,26 @@ func (ws *WeatherServer) processWeather(wl *weatherLookup) weatherProcessed {
 	return wlr
 }
 
+func (ws *WeatherServer) validateLatLong(lat, long string) (float64, float64, error) {
+	//we can use lat/long directly.
+	//validate it.
+	latF, err := strconv.ParseFloat(lat, 64)
+	if err != nil {
+		return 0, 0, errors.New("400 error decoding lattitude")
+	}
+	if latF < -90 || latF > 90 {
+		return 0, 0, errors.New("400 lattitude should be between -90 and 90 degrees")
+	}
+	longF, err := strconv.ParseFloat(long, 64)
+	if err != nil {
+		return 0, 0, errors.New("400 error decoding longitude")
+	}
+	if longF < -180 || longF > 180 {
+		return 0, 0, errors.New("400 longitude should be between -180 and 180 degrees")
+	}
+	return latF, longF, nil
+}
+
 func (ws *WeatherServer) zipToLatLong(zip, country string) (float64, float64, error) {
 	var reqUrl string
 	if len(country) == 0 {
@@ -133,29 +153,11 @@ func (ws *WeatherServer) weatherForLatLong(w http.ResponseWriter, r *http.Reques
 	country := r.URL.Query().Get("country")
 	var latF, longF float64
 	var err error
-
 	if len(lat) != 0 && len(long) != 0 {
-		//we can use lat/long directly.
-		//validate it.
-		latF, err = strconv.ParseFloat(lat, 64)
+		latF, longF, err = ws.validateLatLong(lat, long)
 		if err != nil {
-			http.Error(w, "400 error decoding lattitude", http.StatusBadRequest)
-			return
+			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
-		if latF < -90 || latF > 90 {
-			http.Error(w, "400 lattitude should be between -90 and 90 degrees", http.StatusBadRequest)
-			return
-		}
-		longF, err = strconv.ParseFloat(long, 64)
-		if err != nil {
-			http.Error(w, "400 error decoding longitude", http.StatusBadRequest)
-			return
-		}
-		if longF < -180 || longF > 180 {
-			http.Error(w, "400 longitude should be between -180 and 180 degrees", http.StatusBadRequest)
-			return
-		}
-
 	} else if len(zip) != 0 {
 		latF, longF, err = ws.zipToLatLong(zip, country)
 		if err != nil {
