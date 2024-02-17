@@ -1,0 +1,5 @@
+{
+    "HttpPort": 4966,
+    "WeatherApiKey" : "",
+    "WeatherUrl"    : "/weather"
+}
