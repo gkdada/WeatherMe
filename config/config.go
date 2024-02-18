@@ -34,7 +34,10 @@ func LoadConfig() (*Config, error) {
 	}
 
 	//prepend a forward slash if it doesn't have it already
-	if len(cnf.WeatherUrl) == 0 || cnf.WeatherUrl[0] != '/' {
+	if len(cnf.WeatherUrl) == 0 {
+		cnf.WeatherUrl = "/weather"
+	}
+	if cnf.WeatherUrl[0] != '/' {
 		cnf.WeatherUrl = "/" + cnf.WeatherUrl
 	}
 
