@@ -22,16 +22,11 @@ type zipLookup struct {
 }
 
 type weatherLookup struct {
-	Coord struct {
-		Lon float64 `json:"lon"`
-		Lat float64 `json:"lat"`
-	} `json:"coord"`
 	Weather []struct {
 		Main string `json:"main"`
 	} `json:"weather"`
 	Main struct {
-		Temp      float64 `json:"temp"`
-		FeelsLike float64 `json:"feels_like"`
+		Temp float64 `json:"temp"`
 	} `json:"main"`
 }
 
