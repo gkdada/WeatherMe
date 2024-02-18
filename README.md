@@ -33,7 +33,7 @@ Where zip = 2020 and country = AU (Austrilia. The zip code is for Sydney Interna
 
 ## Future development
 
-One possibility is to add the api key in the incoming request instead of the configuration.
+One possibility is to add the api key in the incoming request so that it doesn't have to be added to configuration.
 
 The code can be encapsulated into a small little WeatherMe app, possibly with hard-configured zip code to provide one-click weather summary on mobile devices.
 
