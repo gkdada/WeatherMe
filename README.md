@@ -3,10 +3,13 @@ Looks up weather at a given lat/long or a given zip code (with optional country 
 
 ## Configuration
 
-Requires a configuration of 
-    * http server port (defaults to 8192), 
-    * Weather URL (defaults to "/weather" if not provided), and 
-    * a openweathermap.org API key. Application cannot fetch weather info without this key, so the server refuses to run if the key field is not provided.
+<p>Requires a configuration of:</p>
+<ul>
+<li>http server port (defaults to 8192),</li>
+<li>Weather URL (defaults to "/weather" if not provided), and </li>
+<li>a openweathermap.org API key. Application cannot fetch weather info without this key, so the server refuses to run if the key field is not provided.</li>
+<ul>
+
 
 ## Usage
 
