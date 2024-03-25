@@ -33,6 +33,7 @@ type weatherLookup struct {
 type weatherProcessed struct {
 	Condition string  `json:"condition"`
 	Feels     string  `json:"feels"`
+	//Temp is not part of the requirement. But almost all JSON data processors ignore unknown fields, so it should be ok.
 	Temp      float64 `json:"temp"`
 }
 
