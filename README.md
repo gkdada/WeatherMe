@@ -21,11 +21,11 @@ Once the server is running, it can be used to fetch weather info in one of the t
 
 Where lattitude = 37.3 and logitude = -121.9
 
-### Weather by zip code (US zip codes only)
+### [Extra feature, not part of req] Weather by zip code (US zip codes only)
 
     GET http://localhost:4966/weather?zip=90210
 
-### Weather by zip code and country code 
+### [Extra feature, not part of req] Weather by zip code and country code 
 
     GET http://localhost:4966/weather?zip=2020&country=AU
 
