@@ -13,7 +13,7 @@ Looks up weather at a given lat/long.
 
 ## Usage
 
-Once the server is running, it can be used to fetch weather info in the following way (assuming a port configuration of 4966 in config.json):
+Once the server is running, it can be used to fetch weather info in the following way (assuming HttpPort: 4966 in config.json):
 
 ### Weather by lattitude/longitude.
 
