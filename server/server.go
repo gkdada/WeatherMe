@@ -31,9 +31,8 @@ type weatherLookup struct {
 }
 
 type weatherProcessed struct {
-	Condition string  `json:"condition"`
-	Feels     string  `json:"feels"`
-	Temp      float64 `json:"temp"`
+	Condition string `json:"condition"`
+	Feels     string `json:"feels"`
 }
 
 type WeatherServer struct {
@@ -51,18 +50,17 @@ func (ws *WeatherServer) roundFlt(val float64) float64 {
 }
 
 func (ws *WeatherServer) processWeather(wl *weatherLookup) weatherProcessed {
-	wlr := weatherProcessed{
-		Temp: ws.roundFlt(((wl.Main.Temp - 273.15) * 1.8) + 32), //kelvin to F
-	}
+	wlr := weatherProcessed{}
 	if len(wl.Weather) > 0 {
 		wlr.Condition = wl.Weather[0].Main
 	}
-	if wlr.Temp < 60 {
-		wlr.Feels = "Cold"
-	} else if wlr.Temp < 83 {
-		wlr.Feels = "Moderate"
-	} else {
+	switch {
+	case wl.Main.Temp > 301.48: //about 83 F
 		wlr.Feels = "Hot"
+	case wl.Main.Temp > 288.7: //about 60
+		wlr.Feels = "Moderate"
+	default:
+		wlr.Feels = "Cold"
 	}
 	return wlr
 }
@@ -85,34 +83,6 @@ func (ws *WeatherServer) validateLatLong(lat, long string) (float64, float64, er
 		return 0, 0, errors.New("400 longitude should be between -180 and 180 degrees")
 	}
 	return latF, longF, nil
-}
-
-func (ws *WeatherServer) zipToLatLong(zip, country string) (float64, float64, error) {
-	var reqUrl string
-	if len(country) == 0 {
-		reqUrl = fmt.Sprintf("http://api.openweathermap.org/geo/1.0/zip?zip=%s,US&appid=%s", zip, ws.cnfg.WeatherApiKey)
-	} else {
-		reqUrl = fmt.Sprintf("http://api.openweathermap.org/geo/1.0/zip?zip=%s,%s&appid=%s", zip, country, ws.cnfg.WeatherApiKey)
-	}
-	res, err := http.Get(reqUrl)
-	if err != nil {
-		return 0, 0, errors.New("500 error decoding zip/(country) code")
-	}
-	if res.StatusCode != 200 {
-		resp := fmt.Sprintf("500 error %d decoding zip/(country) code", res.StatusCode)
-		return 0, 0, errors.New(resp)
-	}
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return 0, 0, errors.New("500 error reading WeatherApi json zip output")
-	}
-	var zl zipLookup
-	err = json.Unmarshal(resBody, &zl)
-	if err != nil {
-		return 0, 0, errors.New("500 error decoding WeatherApi zip json")
-	}
-	fmt.Println("Lat:", zl.Lat, "Long:", zl.Lon)
-	return zl.Lat, zl.Lon, nil
 }
 
 func (ws *WeatherServer) getWeatherForLatLong(latF, longF float64) (*weatherProcessed, error) {
@@ -144,20 +114,12 @@ func (ws *WeatherServer) weatherForLatLong(w http.ResponseWriter, r *http.Reques
 	//3 possible parameters.
 	lat := r.URL.Query().Get("lat")
 	long := r.URL.Query().Get("long")
-	zip := r.URL.Query().Get("zip")
-	country := r.URL.Query().Get("country")
 	var latF, longF float64
 	var err error
 	if len(lat) != 0 && len(long) != 0 {
 		latF, longF, err = ws.validateLatLong(lat, long)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
-		}
-	} else if len(zip) != 0 {
-		latF, longF, err = ws.zipToLatLong(zip, country)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
 		}
 	} else {
 		//return an error

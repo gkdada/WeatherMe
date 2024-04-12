@@ -1,5 +1,5 @@
 # WeatherMe
-Looks up weather at a given lat/long or a given zip code (with optional country code)
+Looks up weather at a given lat/long.
 
 ## Configuration
 
@@ -13,7 +13,7 @@ Looks up weather at a given lat/long or a given zip code (with optional country 
 
 ## Usage
 
-Once the server is running, it can be used to fetch weather info in one of the three following ways. All examples assume using localhost, 4966 for http port, and "/weather" for weather URL.
+Once the server is running, it can be used to fetch weather info in the following way (assuming a port configuration of 4966 in config.json):
 
 ### Weather by lattitude/longitude.
 
@@ -21,19 +21,13 @@ Once the server is running, it can be used to fetch weather info in one of the t
 
 Where lattitude = 37.3 and logitude = -121.9
 
-### Weather by zip code (US zip codes only)
-
-    GET http://localhost:4966/weather?zip=90210
-
-### Weather by zip code and country code 
-
-    GET http://localhost:4966/weather?zip=2020&country=AU
-
-Where zip = 2020 and country = AU (Austrilia. The zip code is for Sydney Internatinal Airport)
-
 ## Future development
 
 One possibility is to add the api key in the incoming request so that it doesn't have to be added to configuration.
 
-The code can be encapsulated into a small little WeatherMe app, possibly with hard-configured zip code to provide one-click weather summary on mobile devices.
+We can have the service lookup zip code since openweathermap.org API allows for zip code based weather lookup already.
+
+Also, we can return the actual temperature at the given location - either in Fahrenheit or Celsius, depending on country of the location. 
+
+The code can be encapsulated into a small little WeatherMe app, possibly with hard-configured lat/long or zip code to provide one-click weather summary on mobile devices.
 
