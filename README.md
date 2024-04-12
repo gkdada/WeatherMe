@@ -17,9 +17,9 @@ Once the server is running, it can be used to fetch weather info in the followin
 
 ### Weather by lattitude/longitude.
 
-    GET http://localhost:4966/weather?lat=37.3&long=-121.9
+    GET http://localhost:4966/weather?lat=34.08&long=-118.3
 
-Where lattitude = 37.3 and logitude = -121.9
+Where lattitude = 34.08 and logitude = -118.3
 
 ## Future development
 

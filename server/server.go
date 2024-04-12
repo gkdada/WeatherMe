@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math"
 	"net/http"
 	"strconv"
 	"sync"
@@ -43,10 +42,6 @@ func NewServer(cnf *config.Config) *WeatherServer {
 	return &WeatherServer{
 		cnfg: cnf,
 	}
-}
-
-func (ws *WeatherServer) roundFlt(val float64) float64 {
-	return math.Round(val*10) / 10
 }
 
 func (ws *WeatherServer) processWeather(wl *weatherLookup) weatherProcessed {
